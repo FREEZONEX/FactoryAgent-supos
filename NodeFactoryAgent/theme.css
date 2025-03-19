@@ -1,0 +1,259 @@
+.red-ui-workspace-chart-grid line {
+    stroke: #616161;
+    stroke-width: 0.7px;
+    opacity: 0.3; /* Reduced from 0.8 to 0.3 */
+}
+
+/* Remove node borders and add modern styling */
+.red-ui-flow-node {
+    stroke: transparent;
+    filter: drop-shadow(0px 3px 5px rgba(0,0,0,0.2))
+}
+
+/* Hover effect on nodes */
+g.red-ui-flow-node-group:hover .red-ui-flow-node {
+    filter: drop-shadow(0px 5px 8px rgba(115, 178, 0, 0.4));
+    transform: translateY(-2px);
+}
+
+/* Node port styling */
+.red-ui-flow-port {
+    stroke: transparent;
+    fill: #73B200;
+    transition: all 0.3s ease;
+}
+
+.red-ui-flow-port:hover {
+    fill: #8ED500;
+    transform: scale(1.2);
+}
+
+/* Node labels */
+.red-ui-flow-node-label {
+    fill: #002c0f;
+    font-family: 'Arial', sans-serif;
+    font-weight: 500;
+}
+
+/* Glowing pulse effect for links between nodes */
+.red-ui-flow-link-line {
+    stroke: #73B200;
+    stroke-width: 2;
+    animation: flowPulse 1.5s infinite;
+    filter: drop-shadow(0px 0px 3px rgba(115, 178, 0, 0.6));
+}
+
+/* Hover effect for links - solid color, no animations */
+g.red-ui-flow-link:hover path.red-ui-flow-link-line {
+    stroke: #8ED500;
+    stroke-width: 2.5;
+    filter: none;
+    animation: none;
+}
+
+g.red-ui-flow-link:hover path.red-ui-flow-link-outline {
+    stroke: rgba(142, 213, 0, 0.3);
+    animation: none;
+}
+
+/* Selected link styling - solid color, no animation */
+g.red-ui-flow-link-selected path.red-ui-flow-link-line {
+    stroke: #FF9500; /* Bright orange for high visibility */
+    stroke-width: 3;
+    filter: none; /* No shadow effect */
+    animation: none; /* Explicitly disable any animations */
+}
+
+g.red-ui-flow-link-selected path.red-ui-flow-link-outline {
+    stroke: rgba(255, 149, 0, 0.3); /* Semi-transparent outline */
+    stroke-width: 5;
+}
+
+
+
+/* Link outline for better visibility */
+.red-ui-flow-link-outline {
+    stroke: rgba(116, 178, 0, 0.438);
+    stroke-width: 4;
+}
+
+/* Glow effect for selected nodes */
+g.red-ui-flow-node-selected .red-ui-flow-node {
+    stroke: #73B200 !important;
+    stroke-width: 1;
+    filter: drop-shadow(0px 0px 8px rgba(115, 178, 0, 0.7));
+}
+
+/* Link selection */
+g.red-ui-flow-link-selected path.red-ui-flow-link-line {
+    stroke: #8ED500;
+    stroke-width: 3;
+    filter: drop-shadow(0px 0px 5px rgba(115, 178, 0, 0.8));
+}
+
+/* Status nodes */
+.red-ui-flow-node-status-dot-green {
+    fill: #73B200;
+    stroke: #73B200;
+}
+
+.red-ui-flow-node-status-ring-green {
+    fill: transparent;
+    stroke: #73B200;
+}
+
+/* Custom animations */
+@keyframes flowPulse {
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+        opacity: 0.8;
+    }
+    50% {
+        stroke-dasharray: 30, 200;
+        stroke-dashoffset: -35;
+        opacity: 1;
+    }
+    100% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: -125;
+        opacity: 0.8;
+    }
+}
+
+/* Node icon styling */
+.red-ui-flow-node-icon-group {
+    filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.2));
+}
+
+.red-ui-flow-node-icon-group .fa-lg {
+    fill: #ffffff;
+}
+
+
+/* Junction nodes */
+.red-ui-flow-junction-background {
+    fill: #73B200;
+    stroke: transparent;
+    filter: drop-shadow(0px 0px 4px rgba(115, 178, 0, 0.6));
+}
+
+.red-ui-flow-junction-port {
+    stroke: transparent;
+    fill: #73B200;
+}
+
+/* Enhanced drag and drop visuals */
+.red-ui-flow-drag-line {
+    stroke: #73B200 !important;
+    stroke-width: 2;
+    filter: drop-shadow(0px 0px 5px rgba(115, 178, 0, 0.6));
+}
+
+/* Status colors */
+.red-ui-flow-node-status-dot-red,
+.red-ui-flow-node-status-ring-red {
+    stroke: #ff5a5a;
+    fill: #ff5a5a;
+}
+
+.red-ui-flow-node-status-ring-red {
+    fill: transparent;
+}
+
+/* Group styling */
+.red-ui-flow-group-body {
+    fill: rgba(115, 178, 0, 0.05);
+    stroke: rgba(115, 178, 0, 0.3);
+    stroke-width: 1;
+    stroke-dasharray: 5, 5;
+}
+
+.red-ui-flow-group-label {
+    fill: #73B200;
+    font-weight: bold;
+}
+
+
+
+/* Deploy button */
+#red-ui-header .red-ui-deploy-button {
+    background: #73B200;
+    color: white !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+#red-ui-header .red-ui-deploy-button:hover {
+    background: #8ED500;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Tab styling */
+.red-ui-tab {
+    border-radius: 4px 4px 0 0;
+    border-color: transparent;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.red-ui-tab.active {
+    background: #73B200;
+    border-color: #73B200;
+}
+
+.red-ui-tab.active a {
+    color: white !important;
+    font-weight: bold;
+}
+
+/* Selection lasso */
+.nr-ui-view-lasso {
+    stroke: #73B200;
+    fill: rgba(115, 178, 0, 0.05);
+    stroke-dasharray: 5, 5;
+}
+
+
+/* Node hover highlight */
+.red-ui-workspace-select-mode g.red-ui-flow-node.red-ui-flow-node-hovered:not(.red-ui-flow-node-selected) .red-ui-flow-node {
+    stroke: #73B200 !important;
+    stroke-dasharray: 4, 2;
+}
+
+/* Enhanced scrollbar for the editor */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #73B200;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #8ED500;
+}
+
+/* Sidebar styling */
+#red-ui-sidebar {
+    background: #969696;
+    border-left: 1px solid rgba(115, 178, 0, 0.3);
+}
+
+/* Add subtle glowing effect to debug messages */
+.red-ui-debug-msg {
+    border-color: transparent;
+    border-left-color: rgba(115, 178, 0, 0.7);
+    background: rgba(255, 255, 255, 0.03);
+    margin: 3px;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.red-ui-debug-msg:hover {
+    background: rgba(115, 178, 0, 0.05);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}

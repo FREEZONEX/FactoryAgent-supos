@@ -1,0 +1,124 @@
+<script type="text/javascript">
+  RED.nodes.registerType("factory-agent-deepseek", {
+    category: "factory agent",
+    color: "#a6bbcf",
+    defaults: {
+      name: { value: "" },
+      model: { value: "deepseek-reasoner" },
+      temperature: { value: "0.7", validate: RED.validators.number() },
+      maxTokens: { value: "2048", validate: RED.validators.number() },
+    },
+    credentials: {
+      apiKey: { type: "password", required: true },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "function.png", // Using the default function icon
+    label: function () {
+      return this.name || "factory-agent-deepseek";
+    },
+    paletteLabel: "factory-agent-deepseek",
+  });
+</script>
+
+<script type="text/html" data-template-name="factory-agent-deepseek">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-apiKey"><i class="fa fa-key"></i> API Key</label>
+    <input
+      type="password"
+      id="node-input-apiKey"
+      placeholder="Your Deepseek API Key"
+    />
+  </div>
+  <div class="form-row">
+    <label for="node-input-model"><i class="fa fa-cogs"></i> Model</label>
+    <select id="node-input-model">
+      <option value="deepseek-reasoner">deepseek-reasoner</option>
+      <option value="deepseek-chat">deepseek-chat</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-temperature"
+      ><i class="fa fa-thermometer-half"></i> Temperature</label
+    >
+    <input type="text" id="node-input-temperature" placeholder="0.7" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-maxTokens"
+      ><i class="fa fa-text-width"></i> Max Tokens</label
+    >
+    <input type="text" id="node-input-maxTokens" placeholder="2048" />
+  </div>
+</script>
+
+<script type="text/html" data-help-name="factory-agent-deepseek">
+  <p>A Node-RED node for interacting with Deepseek's API.</p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt>msg.sysPrompt <span class="property-type">string</span></dt>
+    <dd>The system prompt to send to Deepseek's system role.</dd>
+
+    <dt>msg.envPrompt <span class="property-type">string</span></dt>
+    <dd>Environment prompt to be combined with state and action.</dd>
+
+    <dt>msg.state <span class="property-type">string</span></dt>
+    <dd>State information to be combined with envPrompt and action.</dd>
+
+    <dt class="optional">
+      global.action <span class="property-type">string</span>
+    </dt>
+    <dd>
+      Action information from global context to be combined with envPrompt and
+      state.
+    </dd>
+  </dl>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+    <dt>msg.payload <span class="property-type">object</span></dt>
+    <dd>The complete response from Deepseek API.</dd>
+
+    <dt>msg.deepseekRequest <span class="property-type">object</span></dt>
+    <dd>The request that was sent to Deepseek API.</dd>
+
+    <dt>msg.result <span class="property-type">string</span></dt>
+    <dd>The content from the Deepseek response message.</dd>
+
+    <dt>msg.reasoning_content <span class="property-type">string</span></dt>
+    <dd>The reasoning_content from the Deepseek response (if available).</dd>
+  </dl>
+
+  <h3>Flow Context</h3>
+  <dl class="message-properties">
+    <dt>flow.agentstate <span class="property-type">string</span></dt>
+    <dd>
+      The node manages a flow context variable called 'agentstate' with the
+      following values:
+      <ul>
+        <li>
+          <code>processing</code> - Set when the request is sent to Deepseek API
+        </li>
+        <li>
+          <code>received</code> - Set when a successful response is received
+        </li>
+      </ul>
+    </dd>
+  </dl>
+
+  <h3>Details</h3>
+  <p>This node composes a request to the Deepseek API using:</p>
+  <ul>
+    <li>System message from msg.sysPrompt</li>
+    <li>
+      User message from a JSON combination of msg.envPrompt, msg.state, and
+      global.action
+    </li>
+  </ul>
+  <p>The node requires a Deepseek API key to be configured.</p>
+  <p>You can select between deepseek-reasoner and deepseek-chat models.</p>
+</script>

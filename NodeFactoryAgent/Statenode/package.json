@@ -1,0 +1,20 @@
+{
+  "name": "factory-agent-states",
+  "version": "1.1.7",
+  "description": "Node-RED node for factory agent states management",
+  "keywords": [
+    "node-red",
+    "factory",
+    "agent",
+    "state",
+    "states"
+  ],
+  "node-red": {
+    "nodes": {
+      "factory-agent-states": "factory-agent-states.js"
+    }
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {}
+}

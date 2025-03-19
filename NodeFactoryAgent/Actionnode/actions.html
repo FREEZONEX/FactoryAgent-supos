@@ -1,0 +1,371 @@
+<script type="text/javascript">
+  RED.nodes.registerType("actions", {
+    category: "factory agent",
+    color: "#C0DEED",
+    defaults: {
+      name: { value: "" },
+      actions: { value: [] },
+    },
+    inputs: 0,
+    outputs: 0,
+    icon: "font-awesome/fa-gears",
+    label: function () {
+      return this.name || "Actions";
+    },
+    oneditprepare: function () {
+      const node = this;
+
+      // 添加调试日志
+      console.log("Initial node.actions:", JSON.stringify(node.actions));
+
+      // Initialize actions container
+      const actionsContainer = $("#node-actions-container");
+      let actionsData = node.actions || [];
+
+      // Function to add parameter to an action
+      function addParameter(actionRow, param) {
+        const paramId = (
+          Date.now() + Math.floor(Math.random() * 1000)
+        ).toString();
+        const paramRow = $("<div/>", {
+          class: "parameter-row",
+          id: "param-" + paramId,
+        });
+
+        // Parameter name input
+        const nameInput = $("<input/>", {
+          type: "text",
+          class: "parameter-name node-input",
+          placeholder: "Parameter name",
+          value: param ? param.name : "",
+        });
+
+        // Parameter type select
+        const typeSelect = $("<select/>", {
+          class: "parameter-type node-input",
+        });
+
+        // Add JSON types
+        const jsonTypes = [
+          "string",
+          "number",
+          "boolean",
+          "object",
+          "array",
+          "null",
+        ];
+        jsonTypes.forEach((type) => {
+          typeSelect.append(
+            $("<option/>", {
+              value: type,
+              text: type,
+              selected: param && param.type === type,
+            })
+          );
+        });
+
+        // Parameter description input
+        const descInput = $("<input/>", {
+          type: "text",
+          class: "parameter-description node-input",
+          placeholder: "Parameter description",
+          value: param ? param.description : "",
+        });
+
+        // Delete parameter button
+        const deleteBtn = $("<button/>", {
+          class: "red-ui-button",
+          text: "Delete",
+        }).click(function () {
+          paramRow.remove();
+        });
+
+        // Assemble parameter row
+        paramRow
+          .append(
+            $("<span/>", {
+              class: "param-icon",
+              html: '<i class="fa fa-angle-right"></i>',
+            })
+          )
+          .append(nameInput)
+          .append(typeSelect)
+          .append(descInput)
+          .append(deleteBtn);
+
+        // Add to parameters container
+        const parametersContainer = actionRow.find(".action-parameters");
+        parametersContainer.append(paramRow);
+      }
+
+      // Function to add an action
+      function addAction(action) {
+        const actionId = (
+          Date.now() + Math.floor(Math.random() * 1000)
+        ).toString();
+        const actionRow = $("<div/>", {
+          class: "action-row",
+          id: "action-" + actionId,
+        });
+
+        // Action header
+        const actionHeader = $("<div/>", { class: "action-header" });
+
+        // Action name input
+        const nameInput = $("<input/>", {
+          type: "text",
+          class: "action-name node-input",
+          placeholder: "Action name",
+          value: action ? action.name : "",
+        });
+
+        // Action description input
+        const descInput = $("<input/>", {
+          type: "text",
+          class: "action-description node-input",
+          placeholder: "Action description",
+          value: action ? action.description : "",
+        });
+
+        // Delete action button
+        const deleteBtn = $("<button/>", {
+          class: "red-ui-button",
+          text: "Delete",
+        }).click(function () {
+          actionRow.remove();
+        });
+
+        // Add parameter button
+        const addParamBtn = $("<button/>", {
+          class: "red-ui-button add-param-btn",
+          html: '<i class="fa fa-plus"></i> Add Parameter',
+        }).click(function () {
+          addParameter(actionRow);
+        });
+
+        // Assemble action header
+        actionHeader
+          .append(nameInput)
+          .append(descInput)
+          .append(deleteBtn)
+          .append(addParamBtn);
+
+        // Parameters container
+        const parametersContainer = $("<div/>", { class: "action-parameters" });
+
+        // Assemble action row
+        actionRow.append(actionHeader).append(parametersContainer);
+
+        // Add to actions container
+        actionsContainer.append(actionRow);
+
+        // Add existing parameters if any
+        if (action && Array.isArray(action.parameters)) {
+          console.log(
+            "Adding parameters for action:",
+            action.name,
+            action.parameters
+          );
+          action.parameters.forEach((param) => {
+            addParameter(actionRow, param);
+          });
+        }
+      }
+
+      // Add action button
+      $("#node-add-action").click(function () {
+        addAction();
+      });
+
+      // Load existing actions
+      if (actionsData.length > 0) {
+        actionsData.forEach((action) => {
+          addAction(action);
+        });
+      }
+    },
+    oneditsave: function () {
+      const node = this;
+      const actions = [];
+
+      // Collect all action data
+      $(".action-row").each(function () {
+        const actionRow = $(this);
+        const nameInput = actionRow.find(".action-header .action-name");
+        const descInput = actionRow.find(".action-header .action-description");
+
+        // Skip empty actions
+        if (nameInput.val().trim() === "") return;
+
+        const action = {
+          name: nameInput.val().trim(),
+          description: descInput.val().trim(),
+          parameters: [],
+        };
+
+        // Collect parameters
+        actionRow.find(".parameter-row").each(function () {
+          const paramRow = $(this);
+          const paramName = paramRow.find(".parameter-name").val().trim();
+          const paramType = paramRow.find(".parameter-type").val();
+          const paramDesc = paramRow
+            .find(".parameter-description")
+            .val()
+            .trim();
+
+          // Skip empty parameters
+          if (paramName === "") return;
+
+          action.parameters.push({
+            name: paramName,
+            type: paramType,
+            description: paramDesc,
+          });
+        });
+
+        actions.push(action);
+      });
+
+      // Save to node config
+      node.actions = actions;
+
+      // 添加调试日志
+      console.log("Saved node.actions:", JSON.stringify(node.actions));
+    },
+    oneditcancel: function () {
+      // 添加调试日志
+      console.log("Edit cancelled");
+    },
+  });
+</script>
+
+<script type="text/html" data-template-name="actions">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Node name" />
+  </div>
+
+  <div class="form-row">
+    <label><i class="fa fa-list"></i> Actions</label>
+    <button id="node-add-action" class="red-ui-button">
+      <i class="fa fa-plus"></i> Add Action
+    </button>
+  </div>
+
+  <div class="form-row node-actions-container-row">
+    <div id="node-actions-container" style="min-height: 150px;">
+      <!-- Actions will be dynamically added here -->
+    </div>
+  </div>
+</script>
+
+<script type="text/html" data-help-name="actions">
+  <p>
+    A configuration node that allows users to define multiple actions with
+    parameters and stores them in the global context.
+  </p>
+
+  <h3>Configuration</h3>
+  <p>
+    Define actions with their parameters through the node's configuration panel.
+  </p>
+
+  <h3>Global Context</h3>
+  <p>
+    All defined actions are automatically stored in
+    <code>global.action</code> when the flow is deployed.
+  </p>
+
+  <h3>Details</h3>
+  <p>
+    Each action can have multiple parameters. For each parameter, you need to
+    specify:
+  </p>
+  <ul>
+    <li><strong>Name</strong>: Parameter name</li>
+    <li>
+      <strong>Type</strong>: JSON data type (string, number, boolean, object,
+      array, or null)
+    </li>
+    <li><strong>Description</strong>: Parameter description</li>
+  </ul>
+
+  <h3>Usage in Other Nodes</h3>
+  <p>Access the actions from any function node:</p>
+  <pre>
+const actions = global.get('action');
+const description = actions.actions.MyAction.description;</pre
+  >
+</script>
+
+<style>
+  .action-row {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    padding: 8px;
+    background-color: #f9f9f9;
+  }
+
+  .action-header {
+    display: flex;
+    margin-bottom: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .action-name {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .action-description {
+    flex: 2;
+    min-width: 200px;
+  }
+
+  .action-parameters {
+    margin-left: 20px;
+    border-left: 2px solid #eee;
+    padding-left: 10px;
+  }
+
+  .parameter-row {
+    display: flex;
+    margin-bottom: 6px;
+    padding: 4px 0;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    background-color: #fff;
+    border-radius: 3px;
+    padding: 6px;
+  }
+
+  .param-icon {
+    margin-right: 4px;
+    color: #999;
+  }
+
+  .parameter-name {
+    width: 120px;
+  }
+
+  .parameter-type {
+    width: 80px;
+  }
+
+  .parameter-description {
+    flex: 2;
+    min-width: 180px;
+  }
+
+  .add-param-btn {
+    background-color: #f0f0f0;
+  }
+
+  .node-actions-container-row {
+    padding-top: 4px;
+  }
+</style>

@@ -1,0 +1,31 @@
+{
+  "name": "factory-agent-actions",
+  "version": "1.0.9",
+  "description": "A Node-RED node that allows users to define multiple actions with parameters and stores them in global context",
+  "keywords": [
+    "node-red",
+    "actions",
+    "parameters",
+    "json",
+    "factory agent"
+  ],
+  "node-red": {
+    "nodes": {
+      "actions": "actions.js"
+    }
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FREEZONEX/FactoryAgent/tree/main/NodeFactoryAgent/Actionnode"
+  },
+  "bugs": {
+    "url": "https://github.com/FREEZONEX/FactoryAgent/tree/main/NodeFactoryAgent/Actionnodes"
+  },
+  "homepage": "https://github.com/FREEZONEX/FactoryAgent/tree/main/NodeFactoryAgent/Actionnode",
+  "dependencies": {}
+}

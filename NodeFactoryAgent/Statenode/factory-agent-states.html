@@ -1,0 +1,115 @@
+<script type="text/javascript">
+  RED.nodes.registerType("factory-agent-states", {
+    category: "factory agent",
+    color: "#a6bbcf",
+    defaults: {
+      name: { value: "" },
+      systemPrompt: { value: "", required: false },
+      environmentDescription: { value: "", required: false },
+      initialDelay: {
+        value: 30,
+        required: true,
+        validate: RED.validators.number(),
+      },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "node-red-icon",
+    label: function () {
+      return this.name || "factory-agent-states";
+    },
+    paletteLabel: "factory-agent-states",
+  });
+</script>
+
+<script type="text/html" data-template-name="factory-agent-states">
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-initialDelay"
+      ><i class="fa fa-clock-o"></i> Initial Delay (seconds)</label
+    >
+    <input
+      type="number"
+      id="node-input-initialDelay"
+      min="1"
+      placeholder="30"
+    />
+  </div>
+  <div class="form-row">
+    <label for="node-input-systemPrompt"
+      ><i class="fa fa-commenting"></i> System Prompt</label
+    >
+    <textarea
+      id="node-input-systemPrompt"
+      rows="5"
+      style="width: 70%;"
+      placeholder="Enter system prompt here"
+    ></textarea>
+  </div>
+  <div class="form-row">
+    <label for="node-input-environmentDescription"
+      ><i class="fa fa-sitemap"></i> Environment Description</label
+    >
+    <textarea
+      id="node-input-environmentDescription"
+      rows="5"
+      style="width: 70%;"
+      placeholder="Enter environment description here"
+    ></textarea>
+  </div>
+</script>
+
+<script type="text/html" data-help-name="factory-agent-states">
+  <p>A node that collects and manages state information for factory agents.</p>
+
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt>payload <span class="property-type">any</span></dt>
+    <dd>The node will cache payloads from different MQTT topics.</dd>
+  </dl>
+
+  <h3>Flow Context</h3>
+  <dl class="message-properties">
+    <dt>flow.agentstate <span class="property-type">string</span></dt>
+    <dd>
+      When this flow variable is set to "received", the node will output all
+      cached states and reset the variable.
+    </dd>
+  </dl>
+
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+    <dt>sysPrompt <span class="property-type">string</span></dt>
+    <dd>System prompt as configured in the node.</dd>
+    <dt>envPrompt <span class="property-type">string</span></dt>
+    <dd>Environment description as configured in the node.</dd>
+    <dt>state <span class="property-type">object</span></dt>
+    <dd>All cached topic messages, available when agentstate is "received".</dd>
+  </dl>
+
+  <h3>Details</h3>
+  <p>This node is designed for factory agent systems. It does the following:</p>
+  <ul>
+    <li>Caches incoming messages by their topics</li>
+    <li>
+      After receiving the first message, waits for the configured initial delay
+      time (in seconds)
+    </li>
+    <li>Automatically sends the first state update after the initial delay</li>
+    <li>
+      After the first state update, periodically checks the flow context
+      variable "agentstate"
+    </li>
+    <li>
+      When the flow variable equals "received", it outputs all cached states,
+      clears the cache, and resets the variable
+    </li>
+    <li>
+      Provides configured system prompt and environment description in the
+      output message
+    </li>
+  </ul>
+</script>
