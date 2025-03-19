@@ -1,6 +1,6 @@
 # Factory Agent 
 
-![Factory Agent Logo](/assets/Factoryagent.jpg)
+![Factory Agent Logo](/assets/Factoryagent.png)
 
 Factory Agent is a collection of custom NodeRED nodes that communicate with your MQTT broker to obtain real-time information about OT/IT data sources and feed it to LLMs for analysis. This enables LLMs to perform user-defined feedback actions, such as controlling device operations, modifying workshop schedules, or clearing inventory.
 
@@ -27,6 +27,14 @@ The method of using an MQ Broker to aggregate industrial data is also known as U
 4. Send back to a specific MQTT Topic. You'll write programs or use NodeRED to receive the actions the LLM wants to execute from this Topic, then parse and connect to actual devices or systems.
 
    ![Step 4](/assets/4.jpg)
+
+## Virtual Factory Simulation
+
+We also provide a virtual factory simulation that you can use to test Factory Agent without connecting to real industrial equipment. This simulation creates a digital twin of a manufacturing facility that publishes real-time data to MQTT topics, allowing you to develop and test your Factory Agent implementation in a realistic environment.
+
+The simulation includes production processes, resource management, financial metrics, and random disruptions that require adaptive strategies - perfect for demonstrating how LLMs can make operational decisions in industrial settings.
+
+For complete documentation on setting up and using the virtual factory, see [Factory Simulation Documentation](/factorySim/README.MD).
 
 ## Installation
 
