@@ -1,6 +1,6 @@
 # Factory Agent 
 
-![Factory Agent Logo](/assets/Factoryagent.png)
+![Factory Agent Logo](/assets/Factoryagent.jpg)
 
 Factory Agent is a collection of custom NodeRED nodes that communicate with your MQTT broker to obtain real-time information about OT/IT data sources and feed it to LLMs for analysis. This enables LLMs to perform user-defined feedback actions, such as controlling device operations, modifying workshop schedules, or clearing inventory.
 
