@@ -11,33 +11,49 @@ module.exports = function(RED) {
             // Get model from config or use default
             const model = config.model || "deepseek-reasoner";
             let systemPrompt = msg.sysPrompt || "You are a helpful assistant.";
-            let envPrompt = msg.envPrompt || "";
-            let state = msg.state || "";
-            const globalContext = node.context().global;
-            const action = globalContext.get("action") || "";
-            // Create a JSON for user content by combining envPrompt, state, and action
-            const userContentObj = {
-                envPrompt: envPrompt,
-                state: state,
-                action: action
-            };
+            
+            // Prepare the messages array
+            const messages = [
+                {
+                    role: "system",
+                    content: systemPrompt
+                }
+            ];
+            
+            // Check if msg.payload exists
+            if (msg.hasOwnProperty('payload')) {
+                // If payload exists, use it directly as user message content
+                messages.push({
+                    role: "user",
+                    content: typeof msg.payload === 'string' ? msg.payload : JSON.stringify(msg.payload)
+                });
+            } else {
+                // If no payload, use the original logic with envPrompt, state, and action
+                let envPrompt = msg.envPrompt || "";
+                let state = msg.state || "";
+                const globalContext = node.context().global;
+                const action = globalContext.get("action") || "";
+                
+                // Create a JSON for user content by combining envPrompt, state, and action
+                const userContentObj = {
+                    envPrompt: envPrompt,
+                    state: state,
+                    action: action
+                };
 
-            // Convert the combined content to a string
-            const userContent = JSON.stringify(userContentObj);
+                // Convert the combined content to a string
+                const userContent = JSON.stringify(userContentObj);
+                
+                messages.push({
+                    role: "user",
+                    content: userContent
+                });
+            }
 
             // Prepare the request payload
             const payload = {
                 model: model,
-                messages: [
-                    {
-                        role: "system",
-                        content: systemPrompt
-                    },
-                    {
-                        role: "user",
-                        content: userContent
-                    }
-                ],
+                messages: messages,
                 stream: false
             };
 

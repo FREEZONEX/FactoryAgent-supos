@@ -1,6 +1,9 @@
+# If you dont give a shit about agent, u can throw msg.payload to this node and it will send it to deepseek.
+
 # node-red-contrib-factory-agent-deepseek
 
 A Node-RED node for interacting with Deepseek's AI API to create agent-based systems. This node is designed to simplify the process of sending prompts to Deepseek's models and handling responses within Node-RED flows.
+
 
 ## Features
 
