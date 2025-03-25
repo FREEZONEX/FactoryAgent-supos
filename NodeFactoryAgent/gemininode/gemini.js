@@ -10,28 +10,22 @@ module.exports = function(RED) {
 
             // Get model from config or use default
             const model = config.model || "gemini-2.0-flash";
-            let systemPrompt = msg.sysPrompt || "You are a helpful assistant.";
             
-            // Prepare the contents array
-            const contents = [];
+            // Prepare user text content
+            let userText = "";
             
-            // Add system message as a role
-            if (systemPrompt) {
-                contents.push({
-                    role: "system",
-                    parts: [{ text: systemPrompt }]
-                });
+            // Add system prompt as part of user text if available
+            if (msg.sysPrompt) {
+                userText += `Instructions: ${msg.sysPrompt}\n\n`;
             }
             
             // Check if msg.payload exists
             if (msg.hasOwnProperty('payload')) {
-                // If payload exists, use it directly as user message content
-                contents.push({
-                    role: "user",
-                    parts: [{ 
-                        text: typeof msg.payload === 'string' ? msg.payload : JSON.stringify(msg.payload) 
-                    }]
-                });
+                // If payload exists, append it to the user message
+                if (userText) {
+                    userText += "User Input: ";
+                }
+                userText += typeof msg.payload === 'string' ? msg.payload : JSON.stringify(msg.payload);
             } else {
                 // If no payload, use the original logic with envPrompt, state, and action
                 let envPrompt = msg.envPrompt || "";
@@ -39,25 +33,35 @@ module.exports = function(RED) {
                 const globalContext = node.context().global;
                 const action = globalContext.get("action") || "";
                 
-                // Create a JSON for user content by combining envPrompt, state, and action
-                const userContentObj = {
-                    envPrompt: envPrompt,
-                    state: state,
-                    action: action
-                };
-
-                // Convert the combined content to a string
-                const userContent = JSON.stringify(userContentObj);
+                // Append environment context
+                if (envPrompt) {
+                    userText += `Environment Context: ${envPrompt}\n\n`;
+                }
                 
-                contents.push({
-                    role: "user",
-                    parts: [{ text: userContent }]
-                });
+                // Append state information
+                if (state) {
+                    userText += `Current State: ${state}\n\n`;
+                }
+                
+                // Append action information
+                if (action) {
+                    userText += `Action: ${action}\n\n`;
+                }
+                
+                // If there's no content after processing, provide a default
+                if (!userText.trim()) {
+                    userText = "Please provide a response.";
+                }
             }
-
-            // Prepare the request payload
+            
+            // Prepare the request payload - only using "user" role
             const payload = {
-                contents: contents,
+                contents: [
+                    {
+                        role: "user",
+                        parts: [{ text: userText }]
+                    }
+                ],
                 generationConfig: {}
             };
 

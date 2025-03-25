@@ -1,6 +1,6 @@
 {
     "name": "factory-agent-gemini",
-    "version": "1.0.1",
+    "version": "1.0.3",
     "description": "A Node-RED node for interacting with Google's Gemini AI API",
     "keywords": [
       "node-red",
