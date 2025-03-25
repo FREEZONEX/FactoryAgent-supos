@@ -1,0 +1,37 @@
+{
+    "name": "factory-agent-gemini",
+    "version": "1.0.1",
+    "description": "A Node-RED node for interacting with Google's Gemini AI API",
+    "keywords": [
+      "node-red",
+      "gemini",
+      "ai",
+      "factory",
+      "agent",
+      "google"
+    ],
+    "license": "MIT",
+    "dependencies": {
+      "axios": "^1.6.0"
+    },
+    "node-red": {
+      "nodes": {
+        "factory-agent-gemini": "gemini.js"
+      }
+    },
+    "engines": {
+      "node": ">=14.0.0"
+    },
+    "author": {
+      "name": "m3rcyzzz",
+      "email": "zhanghuize@freezonex.io"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/FREEZONEX/FactoryAgent-supos"
+    },
+    "bugs": {
+      "url": "https://github.com/FREEZONEX/FactoryAgent-supos"
+    },
+    "homepage": "https://github.com/FREEZONEX/FactoryAgent-supos"
+  }
