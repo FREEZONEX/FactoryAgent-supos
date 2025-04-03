@@ -5,18 +5,32 @@
     defaults: {
       name: { value: "" },
       actions: { value: [] },
+      agentNode: { value: "global" },
     },
     inputs: 0,
     outputs: 0,
     icon: "font-awesome/fa-gears",
     label: function () {
-      return this.name || "Actions";
+      return this.name || "actions";
     },
     oneditprepare: function () {
       const node = this;
 
       // 添加调试日志
       console.log("Initial node.actions:", JSON.stringify(node.actions));
+
+      // Initialize agent selection box
+      const agentNodeSelect = $("#node-input-agentNode");
+      // Append a global option defaultly
+      agentNodeSelect.append($("<option></option>").val("global").text("Global Context"));
+      // Append other agent nodes
+      RED.nodes.eachNode(function(n) {
+        if ((n.type === "factory-agent-gemini" || n.type === "factory-agent-deepseek") && n.z === RED.workspaces.active()) {
+          agentNodeSelect.append($("<option></option>").val(n.id).text(n.name +"-"+ n.id + "(" + n.type + ")"));
+        }
+      });
+      // Set the selected value
+      agentNodeSelect.val(node.agentNode || "global");
 
       // Initialize actions container
       const actionsContainer = $("#node-actions-container");
@@ -172,11 +186,11 @@
         }
       }
 
+
       // Add action button
       $("#node-add-action").click(function () {
         addAction();
       });
-
       // Load existing actions
       if (actionsData.length > 0) {
         actionsData.forEach((action) => {
@@ -246,6 +260,13 @@
   </div>
 
   <div class="form-row">
+    <label for="node-input-agentNode"><i class="fa fa-robot"></i> Target Agent</label>
+    <select id="node-input-agentNode">
+      <!-- 选项将在 oneditprepare 中动态添加 -->
+    </select>
+  </div>
+
+  <div class="form-row">
     <label><i class="fa fa-list"></i> Actions</label>
     <button id="node-add-action" class="red-ui-button">
       <i class="fa fa-plus"></i> Add Action
@@ -262,18 +283,19 @@
 <script type="text/html" data-help-name="actions">
   <p>
     A configuration node that allows users to define multiple actions with
-    parameters and stores them in the global context.
+    parameters and stores them in the global context or specific agent nodes.
   </p>
 
   <h3>Configuration</h3>
   <p>
-    Define actions with their parameters through the node's configuration panel.
+    Define actions with their parameters through the node's configuration panel. Target agent can be selected from the dropdown menu.
   </p>
 
   <h3>Global Context</h3>
   <p>
-    All defined actions are automatically stored in
-    <code>global.action</code> when the flow is deployed.
+    All defined actions are default stored in
+    <code>global.action</code> or <code>global.action.{agentNode.id}</code>
+    when the flow is deployed.
   </p>
 
   <h3>Details</h3>

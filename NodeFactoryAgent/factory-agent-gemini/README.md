@@ -25,7 +25,7 @@ The Factory Agent Gemini node provides a simple way to integrate Google's Gemini
 
 ```bash
 cd ~/.node-red
-npm install node-red-contrib-factory-agent-gemini
+npm install factory-agent-gemini
 ```
 
 Alternatively, you can use the Node-RED Palette Manager to install the node.
@@ -152,7 +152,7 @@ Factory Agent Gemini节点提供了一种将Google的Gemini AI功能集成到Nod
 
 ```bash
 cd ~/.node-red
-npm install node-red-contrib-factory-agent-gemini
+npm install factory-agent-gemini
 ```
 
 或者，您可以使用Node-RED调色板管理器安装节点。
