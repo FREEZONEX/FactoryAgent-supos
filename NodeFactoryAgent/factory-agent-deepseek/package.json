@@ -15,8 +15,7 @@
     }
   },
   "dependencies": {
-    "axios": "^1.6.0",
-    "factory-agent-deepseek": "^1.1.0"
+    "axios": "^1.6.0"
   },
   "author": "",
   "license": "MIT",

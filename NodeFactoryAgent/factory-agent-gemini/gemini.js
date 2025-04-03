@@ -30,8 +30,17 @@ module.exports = function(RED) {
                 // If no payload, use the original logic with envPrompt, state, and action
                 let envPrompt = msg.envPrompt || "";
                 let state = msg.state || "";
+                
                 const globalContext = node.context().global;
-                const action = globalContext.get("action") || "";
+                // 首先尝试获取节点特定的 actions
+                const nodeSpecificKey = 'action.' + node.id;
+                let action = globalContext.get(nodeSpecificKey);
+                if (!action) {
+                    action = globalContext.get("action.all") || "";
+                    node.debug("No actions found for node, Using global actions");
+                } else {
+                    node.debug("Using node-specific actions");
+                }
                 
                 // Append environment context
                 if (envPrompt) {
@@ -45,7 +54,10 @@ module.exports = function(RED) {
                 
                 // Append action information
                 if (action) {
-                    userText += `Action: ${action}\n\n`;
+                    // userText += `Action: ${action}\n\n`;
+                    //Action load fail fixed: Use JSON.stringify to convert the action object to a string
+                    userText += `Action: ${JSON.stringify(action)}\n\n`;
+
                 }
                 
                 // If there's no content after processing, provide a default

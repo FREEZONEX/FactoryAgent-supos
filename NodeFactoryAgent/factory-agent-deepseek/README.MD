@@ -1,6 +1,6 @@
 # If you dont give a shit about agent, u can throw msg.payload to this node and it will send it to deepseek.
 
-# node-red-contrib-factory-agent-deepseek
+# Node-RED factory-agent-deepseek
 
 A Node-RED node for interacting with Deepseek's AI API to create agent-based systems. This node is designed to simplify the process of sending prompts to Deepseek's models and handling responses within Node-RED flows.
 
@@ -19,14 +19,14 @@ Install via Node-RED's Manage Palette:
 
 1. In Node-RED, navigate to the menu → Manage palette
 2. Go to the "Install" tab
-3. Search for "node-red-contrib-factory-agent-deepseek"
+3. Search for "factory-agent-deepseek"
 4. Click install
 
 Or install via npm:
 
 ```bash
 cd ~/.node-red
-npm install node-red-contrib-factory-agent-deepseek
+npm install factory-agent-deepseek
 ```
 
 ## Usage

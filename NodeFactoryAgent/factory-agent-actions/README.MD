@@ -4,7 +4,7 @@
 
 ## English
 
-A Node-RED node that allows users to create multiple actions with descriptions and parameters, storing them in the global context for use by other nodes.
+A Node-RED node that allows users to create multiple actions with descriptions and parameters, storing them in the global context or directly targeting specific agent nodes.
 
 ### Features
 
@@ -13,7 +13,8 @@ A Node-RED node that allows users to create multiple actions with descriptions a
 - Parameter types support all JSON data types (string, number, boolean, object, array, null)
 - Elegant interface to add and remove actions and parameters
 - **Configuration-only node with no inputs or outputs**
-- **Automatically stores all actions in `global.action` upon deployment**
+- **Target specific agent nodes or use global context**
+- **Automatically cleans up when disabled or removed**
 - Suitable for factory automation and process control scenarios
 
 ### Installation
@@ -35,15 +36,16 @@ Or through the Node-RED Palette Manager:
 
 1. Drag the node from the "Factory Agent" category to your workspace
 2. Double-click the node to open the configuration panel
-3. Click the "Add Action" button to create new actions
-4. Enter a name and description for each action
-5. Add parameters to each action as needed
-6. Click "Done" to save the configuration
-7. Deploy your flow
+3. Select a target agent node from the dropdown or use "Global Context"
+4. Click the "Add Action" button to create new actions
+5. Enter a name and description for each action
+6. Add parameters to each action as needed
+7. Click "Done" to save the configuration
+8. Deploy your flow
+When the node is deployed, all configured actions are automatically stored either:
 
-When the node is deployed, all configured actions are automatically stored in the global context variable `global.action`. This makes the actions accessible to other nodes in your flow.
-
-This is a configuration-only node that doesn't have inputs or outputs. It doesn't process messages but serves as a central repository for action definitions.
+- In the global context variable `global.action.all` if "Global Context" is selected
+- In a node-specific context variable `global.action.[node-id]` if a specific agent node is selected.
 
 ### Accessing Actions from Other Nodes
 
@@ -68,7 +70,7 @@ MIT
 
 ## 中文
 
-一个允许用户创建多个操作（Actions）及其描述和参数的Node-RED节点，并将它们存储在全局上下文中供其他节点使用。
+一个允许用户创建多个操作（Actions）及其描述和参数的Node-RED节点，可以将它们存储在全局上下文中或直接指向特定的代理节点。
 
 ### 功能
 
@@ -77,7 +79,8 @@ MIT
 - 参数类型支持所有JSON数据类型（字符串、数字、布尔值、对象、数组、空值）
 - 优雅的界面用于添加和删除操作与参数
 - **纯配置节点，无输入和输出端口**
-- **部署节点时自动将所有操作信息存储到`global.action`全局变量中**
+- **部署节点时自动将所有操作信息指向特定的代理节点或使用全局上下文存储**
+- 在禁用或删除时自动清理
 - 适用于工厂自动化和流程控制场景
 
 ### 安装
@@ -99,15 +102,17 @@ npm install factory-agent-actions
 
 1. 从"Factory Agent"类别中拖动节点到工作区
 2. 双击节点打开配置面板
-3. 点击"添加Action"按钮创建新操作
-4. 为每个操作填写名称和描述
-5. 根据需要为每个操作添加参数
-6. 点击"完成"保存配置
-7. 部署您的流程
+3. 从下拉列表中选择目标代理节点或使用"全局上下文"
+4. 点击"添加Action"按钮创建新操作
+5. 为每个操作填写名称和描述
+6. 根据需要为每个操作添加参数
+7. 点击"完成"保存配置
+8. 部署您的流程
 
-当节点部署时，所有配置的操作会自动存储到全局上下文变量`global.action`中。这使得这些操作可以被流程中的其他节点访问。
+当节点部署时，所有配置的操作会自动存储到：
 
-这是一个纯配置节点，没有输入或输出端口。它不处理消息，而是作为操作定义的中央存储库。
+- 如果选择了"全局上下文"，则存储到全局上下文变量 `global.action.all` 中
+- 如果选择了特定的代理节点，则存储到节点特定的上下文变量 `global.action.[node-id]` 中
 
 ### 从其他节点访问操作
 
@@ -118,10 +123,10 @@ npm install factory-agent-actions
 const actions = global.get('action');
 
 // 访问特定操作的描述
-const actionDescription = actions.actions.MyAction.description;
+const actionDescription = actions.actions.{all}.MyAction.description;
 
 // 访问特定参数
-const paramType = actions.actions.MyAction.parameters.myParam.type;
+const paramType = actions.actions.{all}.MyAction.parameters.myParam.type;
 ```
 
 ### 许可证
